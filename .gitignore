@@ -1,0 +1,13 @@
+# IDE #
+.idea/
+.vscode/
+
+# System #
+.DS_Store
+
+# Rust #
+target/
+*.log
+
+# Web #
+node_modules/
