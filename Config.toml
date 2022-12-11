@@ -1,0 +1,10 @@
+[server]
+name = "Axum-Admin"
+# 服务器IP:端口
+address = "0.0.0.0:3000"
+
+[log]
+dir = "logs"
+prefix = "log"
+# 日志级别  TRACE DEBUG  INFO  WARN ERROR
+log_level = "DEBUG"
