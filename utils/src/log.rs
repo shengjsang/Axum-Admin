@@ -1,8 +1,10 @@
+use chrono::Local;
 use tracing::Level;
 use tracing_appender::non_blocking::WorkerGuard;
-use tracing_subscriber::fmt::format::{Compact, Format};
+use tracing_subscriber::fmt::format::{Compact, Format, Writer};
 use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::{EnvFilter, fmt, Registry};
+use tracing_subscriber::fmt::time::FormatTime;
 use configs::CFG;
 
 pub fn init() -> WorkerGuard {
@@ -28,12 +30,13 @@ pub fn init() -> WorkerGuard {
 }
 
 // 设置日志打印的格式
-pub fn formats() -> Format<Compact> {
+pub fn formats() -> Format<Compact, LocalTimer> {
     fmt::format()
         .with_ansi(false)
         .with_level(true)
         .with_target(true)
         .with_thread_ids(true)
+        .with_timer(LocalTimer)
         .compact()
 }
 
@@ -47,5 +50,14 @@ pub fn get_level() -> Level {
         "WARN" => Level::WARN,
         "ERROR" => Level::ERROR,
         _ => Level::INFO,
+    }
+}
+
+// 设置日志日期格式
+pub struct LocalTimer;
+
+impl FormatTime for LocalTimer {
+    fn format_time(&self, w: &mut Writer<'_>) -> std::fmt::Result {
+        write!(w, "{}", Local::now().format("%FT %T"))
     }
 }

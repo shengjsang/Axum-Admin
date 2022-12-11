@@ -7,6 +7,7 @@ use utils::log;
 
 #[tokio::main]
 async fn main() {
+    // 初始化日志
     let _guard = log::init();
     info!("Starting");
     // route函数来设置路由，两个参数 一个路由路径 一个handler函数
