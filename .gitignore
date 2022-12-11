@@ -7,7 +7,7 @@
 
 # Rust #
 target/
-*.log
+logs/
 
 # Web #
 node_modules/
