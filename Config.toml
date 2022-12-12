@@ -8,3 +8,6 @@ dir = "logs"
 prefix = "log"
 # 日志级别  TRACE DEBUG  INFO  WARN ERROR
 log_level = "DEBUG"
+
+[database]
+url = "postgres://postgres:123456@localhost/ava"

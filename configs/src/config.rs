@@ -7,6 +7,7 @@ pub struct Configs {
     pub server: Server,
     /// 日志配置
     pub log: Log,
+    pub database: Database,
 }
 
 
@@ -29,4 +30,13 @@ pub struct Log {
     pub dir: String,
     /// `prefix` 日志输出文件前缀名
     pub prefix: String,
+}
+
+
+/// 数据库配置
+#[derive(Debug, Deserialize)]
+pub struct Database {
+    /// `url` 数据库连接
+    pub url: String,
+
 }
