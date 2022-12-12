@@ -27,6 +27,6 @@ pub struct Log {
     pub log_level: String,
     /// `dir` 日志输出文件夹
     pub dir: String,
-    /// `file` 日志输出文件名
+    /// `prefix` 日志输出文件前缀名
     pub prefix: String,
 }
