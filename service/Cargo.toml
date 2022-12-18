@@ -12,3 +12,4 @@ tokio = {workspace = true,default-features =false,  features = ["rt-multi-thread
 anyhow = {workspace = true}
 serde_json = {workspace = true}
 serde = {workspace = true}
+scru128 = {workspace = true }

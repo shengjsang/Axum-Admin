@@ -45,3 +45,7 @@ tracing-subscriber = "0.3"
 sea-orm = "0"
 
 anyhow = "1"
+scru128 = "2.3.0"
+md5 = "0.7"
+rand = "0.8.5"
+captcha_rust = "0.1.3"
