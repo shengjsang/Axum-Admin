@@ -1,15 +1,16 @@
 use axum::Json;
+use model::response::Res;
 use model::user::request::CreateReq;
-use serde_json::{json, Value};
+
 use service::user::register;
 use utils::db::{init, DB};
 
-pub async fn create(Json(req): Json<CreateReq>) -> Json<Value> {
+pub async fn create(Json(req): Json<CreateReq>) -> Res<String> {
     let db = DB.get_or_init(init).await;
     let res = register(db, req).await;
 
     match res {
-        Ok(_x) => Json(json!({"data": 200 })),
-        Err(_e) => Json(json!({"data": 404 })),
+        Ok(x) => Res::with_msg(&x),
+        Err(e) => Res::with_err(&e.to_string()),
     }
 }

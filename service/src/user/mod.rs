@@ -2,6 +2,7 @@ use anyhow::Result;
 use model::entity::user;
 use model::user::request::CreateReq;
 
+
 use sea_orm::ActiveValue::Set;
 use sea_orm::DatabaseConnection;
 use sea_orm::EntityTrait;
@@ -18,5 +19,5 @@ pub async fn register(db: &DatabaseConnection, req: CreateReq) -> Result<String>
 
     user::Entity::insert(user).exec(db).await?;
 
-    Ok("用户创建成功".to_string())
+    Ok("用户注册成功".to_string())
 }
