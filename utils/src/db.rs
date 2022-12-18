@@ -1,7 +1,7 @@
-use std::time::Duration;
-use sea_orm::{entity::prelude::DatabaseConnection, ConnectOptions, Database};
-use tokio::sync::OnceCell;
 use configs::CFG;
+use sea_orm::{entity::prelude::DatabaseConnection, ConnectOptions, Database};
+use std::time::Duration;
+use tokio::sync::OnceCell;
 
 //  异步初始化数据库
 pub static DB: OnceCell<DatabaseConnection> = OnceCell::const_new();

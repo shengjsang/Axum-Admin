@@ -10,7 +10,6 @@ pub struct Configs {
     pub database: Database,
 }
 
-
 /// server 配置文件
 #[derive(Debug, Deserialize)]
 pub struct Server {
@@ -32,11 +31,9 @@ pub struct Log {
     pub prefix: String,
 }
 
-
 /// 数据库配置
 #[derive(Debug, Deserialize)]
 pub struct Database {
     /// `url` 数据库连接
     pub url: String,
-
 }

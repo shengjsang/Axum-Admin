@@ -1,22 +1,11 @@
-use axum::{Json, Router};
-use axum::http::StatusCode;
-use axum::routing::{get, get_service};
-use serde_json::{json, Value};
-use utils::db::{DB, init};
-use api::user::{create};
-
-
-
+use api::user::create;
+use axum::routing::get;
+use axum::Router;
 
 pub fn api() -> Router {
-    Router::new()
-        .nest("/user", user_api())
-
+    Router::new().nest("/user", user_api())
 }
 
-
 fn user_api() -> Router {
-    Router::new()
-        .route("/register", get(create)) // 注册
-
+    Router::new().route("/register", get(create)) // 注册
 }

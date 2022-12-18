@@ -10,7 +10,6 @@ api = {path = "../api"}
 router = {path = "../router"}
 utils = {path = "../utils"}
 configs = {path = "../configs"}
-migration = {path = "../migration"}
 axum = { workspace = true }
 serde_json = { workspace = true }
 tokio = {workspace = true,default-features =false,  features = ["rt-multi-thread", "macros", "parking_lot", "signal"]}

@@ -1,8 +1,7 @@
-use std::{fs::File, io::Read};
-use once_cell::sync::Lazy;
 use crate::config::Configs;
+use once_cell::sync::Lazy;
+use std::{fs::File, io::Read};
 mod config;
-
 
 // 设置配置文件路径
 const CFG_FILE: &str = "Config.toml";
@@ -17,7 +16,8 @@ impl Configs {
         };
         let mut config_info = String::new();
         // 读取内容
-        file.read_to_string(&mut config_info).expect("读取配置文件内容错误");
+        file.read_to_string(&mut config_info)
+            .expect("读取配置文件内容错误");
         // toml -> Configs
         toml::from_str(&config_info).expect("解析配置文件错误")
     }

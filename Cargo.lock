@@ -71,7 +71,6 @@ dependencies = [
  "api",
  "axum",
  "configs",
- "migration",
  "router",
  "serde_json",
  "tokio",
@@ -1649,16 +1648,8 @@ dependencies = [
 name = "router"
 version = "0.1.0"
 dependencies = [
- "anyhow",
  "api",
  "axum",
- "model",
- "sea-orm",
- "serde",
- "serde_json",
- "service",
- "tokio",
- "utils",
 ]
 
 [[package]]
@@ -1957,13 +1948,11 @@ name = "service"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "axum",
  "model",
  "sea-orm",
  "serde",
  "serde_json",
  "tokio",
- "utils",
 ]
 
 [[package]]

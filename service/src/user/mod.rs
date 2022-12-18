@@ -1,12 +1,8 @@
-use sea_orm::ActiveValue::Set;
-use sea_orm::{DatabaseConnection, TransactionTrait};
-use model::entity::user;
 use anyhow::Result;
-use axum::Json;
+use model::entity::user;
+use sea_orm::ActiveValue::Set;
+use sea_orm::DatabaseConnection;
 use sea_orm::EntityTrait;
-use serde_json::{json, Value};
-use utils::db::{DB, init};
-
 
 pub async fn register(db: &DatabaseConnection) -> Result<String> {
     let user = user::ActiveModel {
