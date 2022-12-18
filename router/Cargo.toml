@@ -8,7 +8,7 @@ edition = "2021"
 [dependencies]
 utils = {path = "../utils"}
 service = {path = "../service"}
-#configs = {path = "../configs"}
+api = {path = "../api"}
 model = {path = "../model"}
 sea-orm = {workspace = true}
 tokio = {workspace = true,default-features =false,  features = ["rt-multi-thread", "macros", "parking_lot", "signal"]}

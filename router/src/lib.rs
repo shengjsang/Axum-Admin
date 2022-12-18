@@ -1,14 +1,22 @@
-use axum::Json;
+use axum::{Json, Router};
+use axum::http::StatusCode;
+use axum::routing::{get, get_service};
 use serde_json::{json, Value};
 use utils::db::{DB, init};
-use service::create_user;
+use api::user::{create};
 
-pub async fn create() -> Json<Value> {
-    let db = DB.get_or_init(init).await;
-    let res = create_user(db).await;
 
-    match res {
-        Ok(x) => Json(json!({"data": 200 })),
-        Err(e) => Json(json!({"data": 404 })),
-    }
+
+
+pub fn api() -> Router {
+    Router::new()
+        .nest("/user", user_api())
+
+}
+
+
+fn user_api() -> Router {
+    Router::new()
+        .route("/register", get(create)) // 注册
+
 }
