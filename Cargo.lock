@@ -44,12 +44,34 @@ dependencies = [
 ]
 
 [[package]]
+name = "anyhow"
+version = "1.0.67"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7724808837b77f4b4de9d283820f9d98bcf496d5692934b857a2399d31ff22e6"
+
+[[package]]
+name = "api"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "axum",
+ "model",
+ "sea-orm",
+ "serde",
+ "serde_json",
+ "service",
+ "tokio",
+ "utils",
+]
+
+[[package]]
 name = "app"
 version = "0.1.0"
 dependencies = [
  "axum",
  "configs",
  "migration",
+ "router",
  "serde_json",
  "tokio",
  "tracing",
@@ -1194,6 +1216,9 @@ dependencies = [
 [[package]]
 name = "model"
 version = "0.1.0"
+dependencies = [
+ "sea-orm",
+]
 
 [[package]]
 name = "nom"
@@ -1622,6 +1647,17 @@ dependencies = [
 [[package]]
 name = "router"
 version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "axum",
+ "model",
+ "sea-orm",
+ "serde",
+ "serde_json",
+ "service",
+ "tokio",
+ "utils",
+]
 
 [[package]]
 name = "rust_decimal"
@@ -1917,6 +1953,12 @@ dependencies = [
 [[package]]
 name = "service"
 version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "model",
+ "sea-orm",
+ "tokio",
+]
 
 [[package]]
 name = "sha1"

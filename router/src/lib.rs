@@ -1,14 +1,14 @@
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
-}
+use axum::Json;
+use serde_json::{json, Value};
+use utils::db::{DB, init};
+use service::create_user;
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+pub async fn create() -> Json<Value> {
+    let db = DB.get_or_init(init).await;
+    let res = create_user(db).await;
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+    match res {
+        Ok(x) => Json(json!({"data": 200 })),
+        Err(e) => Json(json!({"data": 404 })),
     }
 }
