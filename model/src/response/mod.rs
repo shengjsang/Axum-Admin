@@ -1,13 +1,14 @@
+use std::fmt::Debug;
+
 use axum::body;
 use axum::body::Full;
 use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
 use serde::Serialize;
-use std::fmt::Debug;
 
 #[derive(Debug, Serialize, Default)]
 pub struct Res<T> {
-    pub code: Option<i32>,
+    pub code: Option<u32>,
     pub data: Option<T>,
     pub msg: Option<String>,
 }
@@ -37,33 +38,59 @@ where
 }
 
 impl<T: Serialize> Res<T> {
-    pub fn with_data(data: T) -> Self {
+    pub fn new(code: u32, data: T, msg: String) -> Self {
         Self {
-            code: Some(200),
+            code: Some(code),
             data: Some(data),
-            msg: Some("success".to_string()),
+            msg: Some(msg),
         }
     }
-    pub fn with_err(err: &str) -> Self {
-        Self {
-            code: Some(500),
-            data: None,
-            msg: Some(err.to_string()),
-        }
-    }
-    pub fn with_msg(msg: &str) -> Self {
+
+    pub fn ok() -> Self {
         Self {
             code: Some(200),
             data: None,
-            msg: Some(msg.to_string()),
+            msg: None,
         }
     }
-    #[allow(dead_code)]
-    pub fn with_data_msg(data: T, msg: &str) -> Self {
+
+    pub fn ok_with_data(data: T) -> Self {
         Self {
             code: Some(200),
             data: Some(data),
-            msg: Some(msg.to_string()),
+            msg: Some("Success".to_string()),
+        }
+    }
+
+    pub fn ok_with_msg(msg: String) -> Self {
+        Self {
+            code: Some(200),
+            data: None,
+            msg: Some(msg),
+        }
+    }
+
+    pub fn error(code: u32) -> Self {
+        Self {
+            code: Some(code),
+            data: None,
+            msg: None,
+        }
+    }
+
+    pub fn error_with_data(code: u32, data: T) -> Self {
+        Self {
+            code: Some(code),
+            data: Some(data),
+            msg: Some("Error".to_string()),
+        }
+    }
+
+    pub fn error_with_msg(code: u32, msg: String) -> Self {
+        Self {
+            code: Some(code),
+            data: None,
+            msg: Some(msg),
         }
     }
 }

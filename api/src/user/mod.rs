@@ -1,3 +1,4 @@
+use axum::http::StatusCode;
 use axum::Json;
 use model::response::Res;
 use model::user::request::CreateReq;
@@ -10,7 +11,7 @@ pub async fn create(Json(req): Json<CreateReq>) -> Res<String> {
     let res = register(db, req).await;
 
     match res {
-        Ok(x) => Res::with_msg(&x),
-        Err(e) => Res::with_err(&e.to_string()),
+        Ok(x) => Res::ok_with_msg(x),
+        Err(e) => Res::error_with_msg(500, e.to_string()),
     }
 }
