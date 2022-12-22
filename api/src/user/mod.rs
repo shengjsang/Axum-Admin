@@ -1,4 +1,3 @@
-use axum::http::StatusCode;
 use axum::Json;
 use model::response::Res;
 use model::user::request::CreateReq;
