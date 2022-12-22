@@ -1,9 +1,10 @@
 use anyhow::Result;
 use model::entity::user;
-use model::user::request::CreateReq;
 
+use model::user::request::CreateReq;
 use sea_orm::ActiveValue::Set;
 use sea_orm::DatabaseConnection;
+
 use sea_orm::EntityTrait;
 
 pub async fn register(db: &DatabaseConnection, req: CreateReq) -> Result<String> {
