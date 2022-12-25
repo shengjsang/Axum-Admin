@@ -11,9 +11,6 @@ pub async fn create(Json(req): Json<CreateReq>) -> Res<String> {
 
     match res {
         Ok(x) => Res::ok_with_msg(x),
-        Err(e) => {
-            println!("{:?}", e);
-            Res::error_with_msg(500, e.to_string())
-        }
+        Err(e) => Res::error_with_msg(500, e.to_string()),
     }
 }

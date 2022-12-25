@@ -5,12 +5,15 @@ use std::net::SocketAddr;
 use std::str::FromStr;
 use tracing::info;
 use utils::log;
+use utils::redis::init;
 
 #[tokio::main]
 async fn main() {
     // 初始化日志
     let _guard = log::init();
     info!("Starting");
+
+    init().await;
 
     let app = Router::new().nest("/v1", api());
 
