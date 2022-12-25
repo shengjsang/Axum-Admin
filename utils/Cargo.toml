@@ -18,4 +18,4 @@ tracing-subscriber = {workspace = true,default-features =false,  features = ["js
 sea-orm = { workspace = true,  features = ["macros", "runtime-tokio-rustls", "with-chrono","sqlx-postgres"] }
 tokio = {workspace = true}
 once_cell = {workspace = true}
-bb8-redis = {workspace = true}
+redis = {workspace = true, features = ["tokio-comp"] }

@@ -4,16 +4,17 @@ use router::api;
 use std::net::SocketAddr;
 use std::str::FromStr;
 use tracing::info;
-use utils::log;
-use utils::redis::init;
+use utils::redis::test;
+use utils::{log, redis};
 
 #[tokio::main]
 async fn main() {
     // 初始化日志
     let _guard = log::init();
     info!("Starting");
-
-    init().await;
+    let mut con = redis::connect().await.ok().unwrap();
+    let _ = test(&mut con).await;
+    info!("Redis Connect");
 
     let app = Router::new().nest("/v1", api());
 

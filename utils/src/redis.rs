@@ -1,20 +1,18 @@
-use bb8_redis::redis::cmd;
-use bb8_redis::{bb8, RedisConnectionManager};
+use redis::aio::Connection;
+use redis::{Client, RedisResult};
 
-pub async fn init() {
-    let manager = RedisConnectionManager::new("redis://localhost").unwrap();
-    let pool = bb8::Pool::builder().build(manager).await.unwrap();
-    let mut handles = vec![];
+pub async fn connect() -> RedisResult<Connection> {
+    let client = Client::open("redis://localhost").unwrap();
+    let con = client.get_tokio_connection().await.unwrap();
+    Ok(con)
+}
 
-    for _i in 0..10 {
-        let pool = pool.clone();
-
-        handles.push(tokio::spawn(async move {
-            let mut conn = pool.get().await.unwrap();
-
-            let reply: String = cmd("PING").query_async(&mut *conn).await.unwrap();
-
-            println!("{}", reply)
-        }));
-    }
+pub async fn test(con: &mut Connection) -> RedisResult<()> {
+    let _: () = redis::Cmd::new()
+        .arg("SET")
+        .arg("yzm")
+        .arg(123456)
+        .query_async(con)
+        .await?;
+    Ok(())
 }
