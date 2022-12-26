@@ -18,16 +18,21 @@ pub async fn new() -> Result<()> {
         })
         .collect();
 
-    let captcha_img = Captcha::new()
-        .add_chars(6)
+    let mut captcha = Captcha::new();
+    let captcha_code = captcha.add_chars(6).chars_as_string();
+    let _captcha_img = captcha
         .apply_filter(Noise::new(0.5))
         .view(220, 80)
         .as_base64()
         .expect("captcha  create failed");
-
     let mut con = connect().await.unwrap();
-    set(&mut con, captcha_id.as_str(), captcha_img.as_str(), 60 * 15)
-        .await
-        .unwrap();
+    set(
+        &mut con,
+        captcha_id.as_str(),
+        captcha_code.as_str(),
+        60 * 15,
+    )
+    .await
+    .unwrap();
     Ok(())
 }
