@@ -1,18 +1,15 @@
 use redis::aio::Connection;
 use redis::{Client, RedisResult};
+use tracing::info;
 
 pub async fn connect() -> RedisResult<Connection> {
-    let client = Client::open("redis://localhost").unwrap();
-    let con = client.get_tokio_connection().await.unwrap();
+    let client = Client::open("redis://localhost")?;
+    let mut con = client.get_tokio_connection().await?;
+    let res: String = redis::Cmd::new()
+        .arg("Ping")
+        .query_async(&mut con)
+        .await
+        .unwrap();
+    info!("Redis Ping {}", res);
     Ok(con)
-}
-
-pub async fn test(con: &mut Connection) -> RedisResult<()> {
-    let _: () = redis::Cmd::new()
-        .arg("SET")
-        .arg("yzm")
-        .arg(123456)
-        .query_async(con)
-        .await?;
-    Ok(())
 }
