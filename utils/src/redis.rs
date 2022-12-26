@@ -13,3 +13,21 @@ pub async fn connect() -> RedisResult<Connection> {
     info!("Redis Ping {}", res);
     Ok(con)
 }
+
+pub async fn set(con: &mut Connection, key: &str, value: &str, expire: u32) -> RedisResult<()> {
+    redis::Cmd::new()
+        .arg("Set")
+        .arg(key)
+        .arg(value)
+        .query_async(con)
+        .await?;
+
+    redis::Cmd::new()
+        .arg("Expire")
+        .arg(key)
+        .arg(expire)
+        .query_async(con)
+        .await?;
+
+    Ok(())
+}

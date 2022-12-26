@@ -19,3 +19,6 @@ sea-orm = { workspace = true,  features = ["macros", "runtime-tokio-rustls", "wi
 tokio = {workspace = true}
 once_cell = {workspace = true}
 redis = {workspace = true, features = ["tokio-comp"] }
+anyhow = {workspace = true}
+captcha = {workspace = true}
+rand = {workspace = true}

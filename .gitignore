@@ -8,6 +8,7 @@
 # Rust #
 target/
 logs/
+tmp/
 
 # Web #
 node_modules/

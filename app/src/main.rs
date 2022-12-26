@@ -4,7 +4,7 @@ use router::api;
 use std::net::SocketAddr;
 use std::str::FromStr;
 use tracing::info;
-use utils::{log, redis};
+use utils::{captcha, log, redis};
 
 #[tokio::main]
 async fn main() {
@@ -16,6 +16,8 @@ async fn main() {
     let _con = redis::connect().await.unwrap();
     info!("Redis Connect");
 
+    let _ = captcha::new().await.unwrap();
+    info!("Captcha Generated");
     let app = Router::new().nest("/v1", api());
 
     let addr = SocketAddr::from_str(&CFG.server.address).unwrap();
