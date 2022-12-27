@@ -4,7 +4,7 @@ use router::api;
 use std::net::SocketAddr;
 use std::str::FromStr;
 use tracing::info;
-use utils::{captcha, log, redis};
+use utils::log;
 
 #[tokio::main]
 async fn main() {

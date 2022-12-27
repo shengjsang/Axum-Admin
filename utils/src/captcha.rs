@@ -1,8 +1,8 @@
+use crate::rand::Random;
 use crate::redis::{connect, set};
 use anyhow::Result;
 use captcha::filters::Noise;
 use captcha::Captcha;
-use rand::Rng;
 
 pub async fn new() -> Result<(String, String)> {
     let (captcha_id, captcha_code, captcha_img) = generate();
@@ -19,18 +19,7 @@ pub async fn new() -> Result<(String, String)> {
 }
 
 pub fn generate() -> (String, String, String) {
-    const CHARSET: &[u8] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZ\
-                            abcdefghijklmnopqrstuvwxyz\
-                            0123456789";
-    const CAPTCHA_ID_LEN: usize = 16;
-    let mut rng = rand::thread_rng();
-
-    let captcha_id: String = (0..CAPTCHA_ID_LEN)
-        .map(|_| {
-            let idx = rng.gen_range(0..CHARSET.len());
-            CHARSET[idx] as char
-        })
-        .collect();
+    let captcha_id = Random::new(12).generate();
 
     let mut captcha = Captcha::new();
     let captcha_code = captcha.add_chars(6).chars_as_string();

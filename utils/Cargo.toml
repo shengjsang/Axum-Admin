@@ -22,3 +22,4 @@ redis = {workspace = true, features = ["tokio-comp"] }
 anyhow = {workspace = true}
 captcha = {workspace = true}
 rand = {workspace = true}
+md5 = {workspace = true}
