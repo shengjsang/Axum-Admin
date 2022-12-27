@@ -16,7 +16,7 @@ async fn main() {
     let _con = redis::connect().await.unwrap();
     info!("Redis Connect");
 
-    let _ = captcha::new().await.unwrap();
+    let _ = captcha::new().await;
     info!("Captcha Generated");
     let app = Router::new().nest("/v1", api());
 
