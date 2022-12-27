@@ -12,12 +12,6 @@ async fn main() {
     let _guard = log::init();
     info!("Starting");
 
-    // 连接Redis
-    let _con = redis::connect().await.unwrap();
-    info!("Redis Connect");
-
-    let _ = captcha::new().await;
-    info!("Captcha Generated");
     let app = Router::new().nest("/v1", api());
 
     let addr = SocketAddr::from_str(&CFG.server.address).unwrap();
