@@ -6,3 +6,8 @@ pub struct CreateReq {
     pub email: String,
     pub phone: String,
 }
+
+#[derive(Deserialize, Debug)]
+pub struct LoginReq {
+    pub account: String,
+}
