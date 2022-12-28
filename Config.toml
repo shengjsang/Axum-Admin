@@ -11,3 +11,13 @@ log_level = "DEBUG"
 
 [database]
 url = "postgres://postgres:123456@localhost/ava"
+
+[redis]
+url = "redis://localhost"
+
+
+[captcha]
+length = 6
+noise = 0.5
+width = 220
+height = 80

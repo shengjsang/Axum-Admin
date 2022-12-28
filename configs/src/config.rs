@@ -8,6 +8,8 @@ pub struct Configs {
     /// 日志配置
     pub log: Log,
     pub database: Database,
+    pub redis: Redis,
+    pub captcha: Captcha,
 }
 
 /// server 配置文件
@@ -36,4 +38,21 @@ pub struct Log {
 pub struct Database {
     /// `url` 数据库连接
     pub url: String,
+}
+
+/// Redis配置
+#[derive(Debug, Deserialize)]
+pub struct Redis {
+    /// `url` redis连接
+    pub url: String,
+}
+
+/// 验证码配置
+#[derive(Debug, Deserialize)]
+pub struct Captcha {
+    /// [`length`] 验证码长度
+    pub length: u32,
+    pub noise: f32,
+    pub width: u32,
+    pub height: u32,
 }
