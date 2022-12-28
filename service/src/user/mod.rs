@@ -1,4 +1,5 @@
-use anyhow::Result;
+use anyhow::{anyhow, Result};
+use headers::HeaderMap;
 use model::entity::user;
 use model::user::request::{CreateReq, LoginReq};
 use sea_orm::ActiveValue::Set;
@@ -25,7 +26,7 @@ pub async fn register(db: &DatabaseConnection, req: CreateReq) -> Result<String>
     Ok("用户注册成功".to_string())
 }
 
-pub async fn get_by_phone(db: &DatabaseConnection, req: LoginReq) -> Result<String> {
+pub async fn login(db: &DatabaseConnection, req: LoginReq, _header: HeaderMap) -> Result<String> {
     let account = req.account.as_str();
 
     let user = User::find()
@@ -36,13 +37,11 @@ pub async fn get_by_phone(db: &DatabaseConnection, req: LoginReq) -> Result<Stri
                 .add(user::Column::Username.eq(account)),
         )
         .order_by_asc(user::Column::Username)
-        .all(db)
+        .one(db)
         .await?;
 
-    println!("{:?}", user);
-    if user.is_empty() {
-        Ok("号码不存在".to_string())
-    } else {
-        Ok("登录成功".to_string())
+    match user {
+        None => Err(anyhow!("用户不存在")),
+        Some(_) => Ok("用户登录成功".to_string()),
     }
 }

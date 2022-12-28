@@ -1,7 +1,8 @@
+use axum::http::HeaderMap;
 use axum::Json;
 use model::response::Res;
 use model::user::request::{CreateReq, LoginReq};
-use service::user::{get_by_phone, register};
+use service::user::register;
 use utils::db::{init, DB};
 
 pub async fn create(Json(req): Json<CreateReq>) -> Res<String> {
@@ -14,9 +15,9 @@ pub async fn create(Json(req): Json<CreateReq>) -> Res<String> {
     }
 }
 
-pub async fn login(Json(req): Json<LoginReq>) -> Res<String> {
+pub async fn login(header: HeaderMap, Json(req): Json<LoginReq>) -> Res<String> {
     let db = DB.get_or_init(init).await;
-    let res = get_by_phone(db, req).await;
+    let res = service::user::login(db, req, header).await;
 
     match res {
         Ok(x) => Res::ok_with_msg(x),

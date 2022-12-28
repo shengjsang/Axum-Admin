@@ -16,3 +16,4 @@ axum = {workspace = true}
 serde_json = {workspace = true}
 serde = {workspace = true}
 axum-macros = {workspace = true}
+headers = {workspace = true}
