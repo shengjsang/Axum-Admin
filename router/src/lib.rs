@@ -1,6 +1,6 @@
-use api::common::show_captcha;
+use api::common::{show_captcha, test};
 use api::user::{create, login};
-use axum::routing::post;
+use axum::routing::{get, post};
 use axum::Router;
 
 pub fn api() -> Router {
@@ -17,5 +17,7 @@ fn user_api() -> Router {
 }
 
 fn captcha_api() -> Router {
-    Router::new().route("/show-captcha", post(show_captcha))
+    Router::new()
+        .route("/show-captcha", post(show_captcha))
+        .route("/test", get(test))
 }

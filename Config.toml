@@ -1,7 +1,7 @@
 [server]
 name = "Axum-Admin"
 # 服务器IP:端口
-address = "0.0.0.0:3000"
+address = "0.0.0.0:8888"
 
 [log]
 dir = "logs"

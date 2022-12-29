@@ -11,3 +11,7 @@ pub async fn show_captcha() -> Res<Captcha> {
         Err(e) => Res::error_with_msg(500, e.to_string()),
     }
 }
+
+pub async fn test() -> Res<Captcha> {
+    Res::ok_with_msg("test".to_string())
+}
