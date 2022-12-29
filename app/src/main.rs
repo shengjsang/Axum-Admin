@@ -8,6 +8,7 @@ use utils::log;
 
 #[tokio::main]
 async fn main() {
+    service::system::info::get();
     // 初始化日志
     let _guard = log::init();
     info!("Starting");
