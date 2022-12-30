@@ -1,4 +1,5 @@
 use api::common::{show_captcha, test};
+use api::system::info::get_info;
 use api::user::{create, login};
 use axum::routing::{get, post};
 use axum::Router;
@@ -8,6 +9,7 @@ pub fn api() -> Router {
     Router::new()
         .nest("/user", user_api()) //  /user/register
         .nest("/common", captcha_api())
+        .nest("/system", system_api())
 }
 
 fn user_api() -> Router {
@@ -20,4 +22,8 @@ fn captcha_api() -> Router {
     Router::new()
         .route("/show-captcha", post(show_captcha))
         .route("/test", get(test))
+}
+
+fn system_api() -> Router {
+    Router::new().route("/info", get(get_info))
 }
