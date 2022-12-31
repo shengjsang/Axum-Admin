@@ -10,7 +10,7 @@ use user::Entity as User;
 use crate::common::jwt::authorize;
 use model::common::jwt::{AuthBody, AuthPayload};
 use sea_orm::EntityTrait;
-use utils::encrypt::encrypt_password;
+use utils::encrypt::{encrypt_password, verify_password};
 
 pub async fn register(db: &DatabaseConnection, req: CreateReq) -> Result<String> {
     let id = scru128::new_string();
@@ -46,12 +46,17 @@ pub async fn login(db: &DatabaseConnection, req: LoginReq, _header: HeaderMap) -
         .await?;
 
     return if let Some(v) = user {
-        let res = authorize(AuthPayload {
-            id: v.id,
-            account: v.email,
-        })
-        .await?;
-        Ok(res)
+        let password = verify_password(req.password, v.salt);
+        if password != v.password {
+            Err(anyhow!("密码错误".to_string()))
+        } else {
+            let res = authorize(AuthPayload {
+                id: v.id,
+                account: v.email,
+            })
+            .await?;
+            Ok(res)
+        }
     } else {
         Err(anyhow!("用户不存在".to_string()))
     };

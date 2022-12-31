@@ -10,4 +10,5 @@ pub struct CreateReq {
 #[derive(Deserialize, Debug)]
 pub struct LoginReq {
     pub account: String,
+    pub password: String,
 }
