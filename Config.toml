@@ -21,3 +21,8 @@ length = 6
 noise = 0.5
 width = 220
 height = 80
+
+[jwt]
+secret = "meiying"
+# 过期天数
+exp = 7

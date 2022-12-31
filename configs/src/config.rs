@@ -10,6 +10,7 @@ pub struct Configs {
     pub database: Database,
     pub redis: Redis,
     pub captcha: Captcha,
+    pub jwt: JWT,
 }
 
 /// server 配置文件
@@ -55,4 +56,12 @@ pub struct Captcha {
     pub noise: f32,
     pub width: u32,
     pub height: u32,
+}
+
+/// Redis配置
+#[derive(Debug, Deserialize)]
+pub struct JWT {
+    /// `url` redis连接
+    pub secret: String,
+    pub exp: i64,
 }

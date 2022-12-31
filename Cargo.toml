@@ -55,3 +55,6 @@ captcha = "0.0.9"
 axum-macros = "0.3.0"
 headers = "0.3.8"
 sysinfo = "0.26.8"
+
+jsonwebtoken = "8.2.0"
+lazy_static = "1.4.0"
