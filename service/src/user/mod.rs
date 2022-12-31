@@ -1,11 +1,12 @@
 use anyhow::{anyhow, Result};
-use chrono::Local;
+use chrono::{Local, NaiveDateTime};
 use headers::HeaderMap;
-use model::entity::user;
+use model::entity::{user, user_token};
 use model::user::request::{CreateReq, LoginReq};
 use sea_orm::ActiveValue::Set;
 use sea_orm::{ColumnTrait, Condition, DatabaseConnection, QueryFilter, QueryOrder};
 use user::Entity as User;
+use user_token::Entity as UserToken;
 
 use crate::common::jwt::authorize;
 use model::common::jwt::{AuthBody, AuthPayload};
@@ -45,16 +46,29 @@ pub async fn login(db: &DatabaseConnection, req: LoginReq, _header: HeaderMap) -
         .one(db)
         .await?;
 
-    return if let Some(v) = user {
+    return if let Some(user) = user {
+        let v = user.clone();
         let password = verify_password(req.password, v.salt);
         if password != v.password {
             Err(anyhow!("密码错误".to_string()))
         } else {
             let res = authorize(AuthPayload {
                 id: v.id,
-                account: v.email,
+                account: v.username,
             })
             .await?;
+            let fmt = "%Y-%m-%d %H:%M:%S";
+            let input = res.clone();
+            let token = user_token::ActiveModel {
+                token_id: Set(input.token_id),
+                token_type: Set(input.token_type),
+                iat: Set(NaiveDateTime::parse_from_str(&input.iat, fmt).unwrap()),
+                exp: Set(NaiveDateTime::parse_from_str(&input.exp, fmt).unwrap()),
+                token: Set(input.token),
+                account: Set(user.username),
+            };
+
+            UserToken::insert(token).exec(db).await?;
             Ok(res)
         }
     } else {
