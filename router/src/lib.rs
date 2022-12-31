@@ -1,4 +1,4 @@
-use api::common::jwt::{authorize, protected};
+use api::common::jwt::protected;
 use api::common::{show_captcha, test};
 use api::system::info::get_info;
 use api::user::{create, login};
@@ -24,7 +24,6 @@ fn common_api() -> Router {
         .route("/show-captcha", post(show_captcha))
         .route("/test", get(test))
         .route("/protect", get(protected))
-        .route("/authorize", post(authorize))
 }
 
 fn system_api() -> Router {

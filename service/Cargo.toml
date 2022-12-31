@@ -18,3 +18,4 @@ thiserror = {workspace = true}
 headers = {workspace = true}
 sysinfo = {workspace = true}
 axum = {workspace = true}
+jsonwebtoken = {workspace = true}

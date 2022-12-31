@@ -69,6 +69,7 @@ impl IntoResponse for AuthError {
             AuthError::MissingCredentials => (StatusCode::BAD_REQUEST, "Missing credentials"),
             AuthError::TokenCreation => (StatusCode::INTERNAL_SERVER_ERROR, "Token creation error"),
             AuthError::InvalidToken => (StatusCode::BAD_REQUEST, "Invalid token"),
+            AuthError::InvalidUser => (StatusCode::BAD_REQUEST, "Invalid user"),
         };
         let body = Json(json!({
             "error": error_message,
@@ -110,8 +111,7 @@ pub struct Claims {
 
 #[derive(Debug, Deserialize, Clone)]
 pub struct AuthPayload {
-    pub id: String,
-    pub name: String,
+    pub account: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -126,4 +126,5 @@ pub enum AuthError {
     MissingCredentials,
     TokenCreation,
     InvalidToken,
+    InvalidUser,
 }
