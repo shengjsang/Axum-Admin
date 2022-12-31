@@ -1,4 +1,4 @@
-use anyhow::Result;
+use anyhow::{anyhow, Result};
 use headers::HeaderMap;
 use model::entity::user;
 use model::user::request::{CreateReq, LoginReq};
@@ -7,7 +7,7 @@ use sea_orm::{ColumnTrait, Condition, DatabaseConnection, QueryFilter, QueryOrde
 use user::Entity as User;
 
 use crate::common::jwt::authorize;
-use model::common::jwt::{AuthBody, AuthError, AuthPayload};
+use model::common::jwt::{AuthBody, AuthPayload};
 use sea_orm::EntityTrait;
 use utils::encrypt::encrypt_password;
 
@@ -28,11 +28,7 @@ pub async fn register(db: &DatabaseConnection, req: CreateReq) -> Result<String>
     Ok("用户注册成功".to_string())
 }
 
-pub async fn login(
-    db: &DatabaseConnection,
-    req: LoginReq,
-    _header: HeaderMap,
-) -> Result<AuthBody, AuthError> {
+pub async fn login(db: &DatabaseConnection, req: LoginReq, _header: HeaderMap) -> Result<AuthBody> {
     let account = req.account.as_str();
 
     let user = User::find()
@@ -44,16 +40,16 @@ pub async fn login(
         )
         .order_by_asc(user::Column::Username)
         .one(db)
-        .await
-        .unwrap();
+        .await?;
 
-    return if user.is_some() {
-        let payload = AuthPayload {
-            account: account.to_string(),
-        };
-        let res = authorize(payload).await;
-        res
+    return if let Some(v) = user {
+        let res = authorize(AuthPayload {
+            id: v.id,
+            account: v.email,
+        })
+        .await?;
+        Ok(res)
     } else {
-        Err(AuthError::Unknown)
+        Err(anyhow!("用户不存在".to_string()))
     };
 }

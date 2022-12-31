@@ -4,6 +4,7 @@ use model::common::jwt::AuthBody;
 use model::response::Res;
 use model::user::request::{CreateReq, LoginReq};
 use service::user::register;
+use tracing::info;
 use utils::db::{init, DB};
 
 pub async fn create(Json(req): Json<CreateReq>) -> Res<String> {
@@ -21,7 +22,10 @@ pub async fn login(header: HeaderMap, Json(req): Json<LoginReq>) -> Res<AuthBody
     let res = service::user::login(db, req, header).await;
 
     match res {
-        Ok(x) => Res::ok_with_data(x),
-        Err(e) => Res::error_with_msg(500, format!("{:?}", e)),
+        Ok(x) => {
+            info!("{:?}", x);
+            Res::ok_with_data(x)
+        }
+        Err(e) => Res::error_with_msg(500, e.to_string()),
     }
 }

@@ -18,3 +18,4 @@ serde = {workspace = true}
 axum-macros = {workspace = true}
 headers = {workspace = true}
 jsonwebtoken = {workspace = true}
+tracing = {workspace = true}

@@ -6,13 +6,13 @@ use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
 use axum::Json;
 use axum::{async_trait, RequestPartsExt};
-use chrono::{Duration, Local};
+use chrono::{Duration, Local, TimeZone};
 use configs::CFG;
 use jsonwebtoken::{decode, DecodingKey, EncodingKey, Validation};
 use once_cell::sync::Lazy;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
-use std::fmt::Display;
+use std::fmt::{Debug, Display};
 use thiserror::Error;
 
 pub static KEYS: Lazy<Keys> = Lazy::new(|| {
@@ -30,10 +30,14 @@ impl Keys {
 }
 
 impl AuthBody {
-    pub fn new(access_token: String) -> Self {
+    pub fn new(access_token: String, token_id: String, iat: i64, exp: i64) -> Self {
+        let fmt = "%Y-%m-%d %H:%M:%S";
         Self {
+            token_id,
             token: access_token,
             token_type: "Bearer".to_string(),
+            iat: format!("{}", Local.timestamp_opt(iat, 0).unwrap().format(fmt)),
+            exp: format!("{}", Local.timestamp_opt(exp, 0).unwrap().format(fmt)),
         }
     }
 }
@@ -49,14 +53,15 @@ impl Display for Claims {
 }
 
 impl Claims {
-    pub fn new(name: String) -> Self {
-        let id = scru128::new_string();
+    pub fn new(id: String, account: String) -> Self {
+        let token_id = scru128::new_string();
         let iat = Local::now();
         let exp = iat + Duration::hours(24 * &CFG.jwt.exp);
 
         Self {
             id,
-            account: name,
+            token_id,
+            account,
             exp: exp.timestamp(),
             iat: iat.timestamp(),
         }
@@ -105,6 +110,7 @@ pub struct Keys {
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Claims {
     pub id: String,
+    pub token_id: String,
     pub account: String,
     pub exp: i64,
     pub iat: i64,
@@ -112,13 +118,17 @@ pub struct Claims {
 
 #[derive(Debug, Deserialize, Clone)]
 pub struct AuthPayload {
+    pub id: String,
     pub account: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct AuthBody {
-    token: String,
-    token_type: String,
+    pub token_id: String,
+    pub token_type: String,
+    pub iat: String,
+    pub exp: String,
+    pub token: String,
 }
 
 #[derive(Error, Debug)]
