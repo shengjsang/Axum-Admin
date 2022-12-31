@@ -13,6 +13,7 @@ use once_cell::sync::Lazy;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use std::fmt::Display;
+use thiserror::Error;
 
 pub static KEYS: Lazy<Keys> = Lazy::new(|| {
     let secret = &CFG.jwt.secret;
@@ -69,7 +70,7 @@ impl IntoResponse for AuthError {
             AuthError::MissingCredentials => (StatusCode::BAD_REQUEST, "Missing credentials"),
             AuthError::TokenCreation => (StatusCode::INTERNAL_SERVER_ERROR, "Token creation error"),
             AuthError::InvalidToken => (StatusCode::BAD_REQUEST, "Invalid token"),
-            AuthError::InvalidUser => (StatusCode::BAD_REQUEST, "Invalid user"),
+            AuthError::Unknown => (StatusCode::INTERNAL_SERVER_ERROR, "Unknown error"),
         };
         let body = Json(json!({
             "error": error_message,
@@ -120,11 +121,16 @@ pub struct AuthBody {
     token_type: String,
 }
 
-#[derive(Debug)]
+#[derive(Error, Debug)]
 pub enum AuthError {
+    #[error("Wrong credentials")]
     WrongCredentials,
+    #[error("Missing credentials")]
     MissingCredentials,
+    #[error("Token creation error")]
     TokenCreation,
+    #[error("Invalid token")]
     InvalidToken,
-    InvalidUser,
+    #[error("Unknown")]
+    Unknown,
 }

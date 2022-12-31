@@ -54,6 +54,6 @@ pub async fn login(
         let res = authorize(payload).await;
         res
     } else {
-        Err(AuthError::InvalidUser)
+        Err(AuthError::Unknown)
     };
 }
