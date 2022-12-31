@@ -1,4 +1,5 @@
 use anyhow::{anyhow, Result};
+use chrono::Local;
 use headers::HeaderMap;
 use model::entity::user;
 use model::user::request::{CreateReq, LoginReq};
@@ -21,6 +22,8 @@ pub async fn register(db: &DatabaseConnection, req: CreateReq) -> Result<String>
         email: Set(req.email),
         password: Set(password),
         salt: Set(salt),
+        created_at: Set(Local::now().naive_local()),
+        updated_at: Set(None),
     };
 
     User::insert(user).exec(db).await?;

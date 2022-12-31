@@ -19,3 +19,4 @@ headers = {workspace = true}
 sysinfo = {workspace = true}
 axum = {workspace = true}
 jsonwebtoken = {workspace = true}
+chrono = {workspace = true}
