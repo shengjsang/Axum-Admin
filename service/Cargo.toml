@@ -17,3 +17,4 @@ scru128 = {workspace = true }
 thiserror = {workspace = true}
 headers = {workspace = true}
 sysinfo = {workspace = true}
+axum = {workspace = true}

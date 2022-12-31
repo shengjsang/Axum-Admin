@@ -63,6 +63,7 @@ dependencies = [
  "axum",
  "axum-macros",
  "headers",
+ "jsonwebtoken",
  "model",
  "sea-orm",
  "serde",
@@ -282,6 +283,7 @@ dependencies = [
  "bitflags",
  "bytes",
  "futures-util",
+ "headers",
  "http",
  "http-body",
  "hyper",
@@ -2275,6 +2277,7 @@ name = "service"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "axum",
  "headers",
  "model",
  "scru128",

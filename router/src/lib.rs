@@ -1,3 +1,4 @@
+use api::common::jwt::{authorize, protected};
 use api::common::{show_captcha, test};
 use api::system::info::get_info;
 use api::user::{create, login};
@@ -8,7 +9,7 @@ pub fn api() -> Router {
     // 嵌套path 方便我们对不同的功能进行细分和管理
     Router::new()
         .nest("/user", user_api()) //  /user/register
-        .nest("/common", captcha_api())
+        .nest("/common", common_api())
         .nest("/system", system_api())
 }
 
@@ -18,10 +19,12 @@ fn user_api() -> Router {
         .route("/login", post(login))
 }
 
-fn captcha_api() -> Router {
+fn common_api() -> Router {
     Router::new()
         .route("/show-captcha", post(show_captcha))
         .route("/test", get(test))
+        .route("/protect", get(protected))
+        .route("/authorize", post(authorize))
 }
 
 fn system_api() -> Router {

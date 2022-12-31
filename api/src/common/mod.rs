@@ -1,5 +1,6 @@
 use model::common::response::Captcha;
 use model::response::Res;
+pub mod jwt;
 
 pub async fn show_captcha() -> Res<Captcha> {
     let res = utils::captcha::new().await;
