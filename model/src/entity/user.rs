@@ -17,6 +17,7 @@ pub struct Model {
     pub salt: String,
     pub created_at: DateTime,
     pub updated_at: Option<DateTime>,
+    pub status: Option<bool>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
