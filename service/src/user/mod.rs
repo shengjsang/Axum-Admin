@@ -4,10 +4,7 @@ use headers::HeaderMap;
 use model::entity::{user, user_token};
 use model::user::request::{CreateReq, LoginReq};
 use sea_orm::ActiveValue::Set;
-use sea_orm::{
-    ColumnTrait, Condition, DatabaseBackend, DatabaseConnection, QueryFilter, QueryOrder,
-    QueryTrait,
-};
+use sea_orm::{ColumnTrait, Condition, DatabaseConnection, QueryFilter, QueryOrder};
 use user::Entity as User;
 use user_token::Entity as UserToken;
 
@@ -50,36 +47,41 @@ pub async fn login(db: &DatabaseConnection, req: LoginReq, _header: HeaderMap) -
         .one(db)
         .await?;
 
-    return if let Some(user) = user {
-        let v = user.clone();
-        if v.clone().status == Some(false) {
-            return Err(anyhow!("用户无效".to_string()));
+    let user = match user {
+        None => {
+            return Err(anyhow!("用户不存在"));
         }
-        let password = verify_password(req.password, v.salt);
-        if password != v.password {
-            Err(anyhow!("密码错误".to_string()))
-        } else {
-            let res = authorize(AuthPayload {
-                id: v.id,
-                account: v.username,
-            })
-            .await?;
-            let fmt = "%Y-%m-%d %H:%M:%S";
-            let input = res.clone();
-            let token = user_token::ActiveModel {
-                token_id: Set(input.token_id),
-                token_type: Set(input.token_type),
-                iat: Set(NaiveDateTime::parse_from_str(&input.iat, fmt).unwrap()),
-                exp: Set(NaiveDateTime::parse_from_str(&input.exp, fmt).unwrap()),
-                token: Set(input.token),
-                account: Set(user.username),
-            };
-
-            UserToken::insert(token).exec(db).await?;
-
-            Ok(res)
+        Some(user) => {
+            if user.status == Some(false) {
+                return Err(anyhow!("用户已失效"));
+            } else {
+                user
+            }
         }
-    } else {
-        Err(anyhow!("用户不存在".to_string()))
     };
+
+    let password = verify_password(req.password, user.salt);
+    if password != user.password {
+        Err(anyhow!("密码错误".to_string()))
+    } else {
+        let res = authorize(AuthPayload {
+            id: user.id,
+            account: user.username.clone(),
+        })
+        .await?;
+        let fmt = "%Y-%m-%d %H:%M:%S";
+        let auth_body = res.clone();
+        let token = user_token::ActiveModel {
+            token_id: Set(auth_body.token_id),
+            token_type: Set(auth_body.token_type),
+            iat: Set(NaiveDateTime::parse_from_str(&auth_body.iat, fmt).unwrap()),
+            exp: Set(NaiveDateTime::parse_from_str(&auth_body.exp, fmt).unwrap()),
+            token: Set(auth_body.token),
+            account: Set(user.username),
+        };
+
+        UserToken::insert(token).exec(db).await?;
+
+        Ok(res)
+    }
 }
