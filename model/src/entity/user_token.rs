@@ -10,6 +10,7 @@ pub struct Model {
     pub token_type: String,
     pub iat: DateTime,
     pub exp: DateTime,
+    #[sea_orm(column_type = "Text")]
     pub token: String,
     pub account: String,
 }

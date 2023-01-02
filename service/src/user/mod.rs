@@ -4,7 +4,10 @@ use headers::HeaderMap;
 use model::entity::{user, user_token};
 use model::user::request::{CreateReq, LoginReq};
 use sea_orm::ActiveValue::Set;
-use sea_orm::{ColumnTrait, Condition, DatabaseConnection, QueryFilter, QueryOrder};
+use sea_orm::{
+    ColumnTrait, Condition, DatabaseBackend, DatabaseConnection, QueryFilter, QueryOrder,
+    QueryTrait,
+};
 use user::Entity as User;
 use user_token::Entity as UserToken;
 
@@ -25,6 +28,7 @@ pub async fn register(db: &DatabaseConnection, req: CreateReq) -> Result<String>
         salt: Set(salt),
         created_at: Set(Local::now().naive_local()),
         updated_at: Set(None),
+        status: Set(Some(true)),
     };
 
     User::insert(user).exec(db).await?;
@@ -48,6 +52,9 @@ pub async fn login(db: &DatabaseConnection, req: LoginReq, _header: HeaderMap) -
 
     return if let Some(user) = user {
         let v = user.clone();
+        if v.clone().status == Some(false) {
+            return Err(anyhow!("用户无效".to_string()));
+        }
         let password = verify_password(req.password, v.salt);
         if password != v.password {
             Err(anyhow!("密码错误".to_string()))
@@ -69,6 +76,7 @@ pub async fn login(db: &DatabaseConnection, req: LoginReq, _header: HeaderMap) -
             };
 
             UserToken::insert(token).exec(db).await?;
+
             Ok(res)
         }
     } else {
