@@ -1,6 +1,7 @@
 use anyhow::Result;
 use chrono::Local;
 use model::entity::todo;
+use model::entity::todo::Model;
 use model::todo::request::CreateReq;
 use sea_orm::ActiveValue::Set;
 use sea_orm::{DatabaseConnection, EntityTrait};
@@ -19,4 +20,9 @@ pub async fn create_task(db: &DatabaseConnection, req: CreateReq) -> Result<Stri
     Todo::insert(task).exec(db).await?;
 
     Ok("创建成功".to_string())
+}
+
+pub async fn get_all_tasks(db: &DatabaseConnection) -> Result<Vec<Model>> {
+    let tasks = Todo::find().all(db).await?;
+    Ok(tasks)
 }
