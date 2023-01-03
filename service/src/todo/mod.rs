@@ -4,7 +4,6 @@ use model::entity::todo;
 use model::todo::request::CreateReq;
 use sea_orm::ActiveValue::Set;
 use sea_orm::{DatabaseConnection, EntityTrait};
-use std::process::id;
 use todo::Entity as Todo;
 
 pub async fn create_task(db: &DatabaseConnection, req: CreateReq) -> Result<String> {
