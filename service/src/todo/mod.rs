@@ -1,10 +1,11 @@
-use anyhow::Result;
+use anyhow::{anyhow, Result};
 use chrono::Local;
 use model::entity::todo;
 use model::entity::todo::Model;
 use model::todo::request::CreateReq;
+use sea_orm::sea_query::all;
 use sea_orm::ActiveValue::Set;
-use sea_orm::{DatabaseConnection, EntityTrait};
+use sea_orm::{ActiveModelTrait, DatabaseConnection, EntityTrait};
 use todo::Entity as Todo;
 
 pub async fn create_task(db: &DatabaseConnection, req: CreateReq) -> Result<String> {
@@ -20,6 +21,23 @@ pub async fn create_task(db: &DatabaseConnection, req: CreateReq) -> Result<Stri
     Todo::insert(task).exec(db).await?;
 
     Ok("创建成功".to_string())
+}
+
+pub async fn finish_task(db: &DatabaseConnection, id: i32) -> Result<Model> {
+    let res = Todo::find_by_id(id).one(db).await?;
+
+    let mut todo: todo::ActiveModel = match res {
+        None => {
+            return Err(anyhow!("未查到对应任务"));
+        }
+        Some(todo) => todo.into(),
+    };
+
+    todo.status = Set(Some(true));
+
+    let todo: Model = todo.update(db).await?;
+
+    res.Ok(todo)
 }
 
 pub async fn get_all_tasks(db: &DatabaseConnection) -> Result<Vec<Model>> {
