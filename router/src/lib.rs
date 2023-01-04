@@ -2,7 +2,7 @@ use api::common::jwt::protected;
 use api::common::{show_captcha, test};
 use api::system::info::get_info;
 use api::todo;
-use api::todo::get_all_tasks;
+use api::todo::{finish_task, get_all_tasks};
 use api::user::{create, login};
 use axum::routing::{get, post};
 use axum::Router;
@@ -26,6 +26,7 @@ fn todo_api() -> Router {
     Router::new()
         .route("/create", post(todo::create))
         .route("/get-all", get(get_all_tasks)) // 注册
+        .route("/finish-task", post(finish_task))
 }
 
 fn common_api() -> Router {

@@ -1,5 +1,4 @@
 use axum::Json;
-use model::entity::prelude::Todo;
 use model::entity::todo::Model;
 use model::response::Res;
 use model::todo::request::{CreateReq, FinishTaskReq};
@@ -29,6 +28,7 @@ pub async fn get_all_tasks() -> Res<Vec<Model>> {
 pub async fn finish_task(Json(req): Json<FinishTaskReq>) -> Res<Model> {
     let db = DB.get_or_init(init).await;
     let res = service::todo::finish_task(db, req.id).await;
+    println!("{:?}", res);
     match res {
         Ok(x) => Res::ok_with_data(x),
         Err(e) => Res::error_with_msg(500, e.to_string()),

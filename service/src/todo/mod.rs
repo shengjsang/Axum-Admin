@@ -3,7 +3,6 @@ use chrono::Local;
 use model::entity::todo;
 use model::entity::todo::Model;
 use model::todo::request::CreateReq;
-use sea_orm::sea_query::all;
 use sea_orm::ActiveValue::Set;
 use sea_orm::{ActiveModelTrait, DatabaseConnection, EntityTrait};
 use todo::Entity as Todo;
@@ -37,7 +36,7 @@ pub async fn finish_task(db: &DatabaseConnection, id: i32) -> Result<Model> {
 
     let todo: Model = todo.update(db).await?;
 
-    res.Ok(todo)
+    Ok(todo)
 }
 
 pub async fn get_all_tasks(db: &DatabaseConnection) -> Result<Vec<Model>> {
