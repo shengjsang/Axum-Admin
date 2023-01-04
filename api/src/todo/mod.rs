@@ -25,10 +25,9 @@ pub async fn get_all_tasks() -> Res<Vec<Model>> {
     }
 }
 
-pub async fn finish_task(Json(req): Json<FinishTaskReq>) -> Res<Model> {
+pub async fn change_status(Json(req): Json<FinishTaskReq>) -> Res<Model> {
     let db = DB.get_or_init(init).await;
-    let res = service::todo::finish_task(db, req.id).await;
-    println!("{:?}", res);
+    let res = service::todo::change_status(db, req.id).await;
     match res {
         Ok(x) => Res::ok_with_data(x),
         Err(e) => Res::error_with_msg(500, e.to_string()),

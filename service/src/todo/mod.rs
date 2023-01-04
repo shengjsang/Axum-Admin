@@ -22,9 +22,8 @@ pub async fn create_task(db: &DatabaseConnection, req: CreateReq) -> Result<Stri
     Ok("创建成功".to_string())
 }
 
-pub async fn finish_task(db: &DatabaseConnection, id: i32) -> Result<Model> {
+pub async fn change_status(db: &DatabaseConnection, id: i32) -> Result<Model> {
     let res = Todo::find_by_id(id).one(db).await?;
-
     let mut todo: todo::ActiveModel = match res {
         None => {
             return Err(anyhow!("未查到对应任务"));
@@ -32,7 +31,9 @@ pub async fn finish_task(db: &DatabaseConnection, id: i32) -> Result<Model> {
         Some(todo) => todo.into(),
     };
 
-    todo.status = Set(Some(true));
+    let status = todo.status.unwrap().unwrap();
+
+    todo.status = Set(Some(!status));
 
     let todo: Model = todo.update(db).await?;
 
