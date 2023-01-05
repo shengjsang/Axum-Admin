@@ -6,6 +6,6 @@ pub struct CreateReq {
 }
 
 #[derive(Deserialize, Debug)]
-pub struct FinishTaskReq {
+pub struct TodoIDReq {
     pub id: i32,
 }

@@ -4,7 +4,7 @@ use model::entity::todo;
 use model::entity::todo::Model;
 use model::todo::request::CreateReq;
 use sea_orm::ActiveValue::Set;
-use sea_orm::{ActiveModelTrait, DatabaseConnection, EntityTrait};
+use sea_orm::{ActiveModelTrait, DatabaseConnection, DeleteResult, EntityTrait};
 use todo::Entity as Todo;
 
 pub async fn create_task(db: &DatabaseConnection, req: CreateReq) -> Result<String> {
@@ -38,6 +38,11 @@ pub async fn change_status(db: &DatabaseConnection, id: i32) -> Result<Model> {
     let todo: Model = todo.update(db).await?;
 
     Ok(todo)
+}
+
+pub async fn delete_task(db: &DatabaseConnection, id: i32) -> Result<String> {
+    let _res: DeleteResult = Todo::delete_by_id(id).exec(db).await?;
+    Ok("删除成功".to_string())
 }
 
 pub async fn get_all_tasks(db: &DatabaseConnection) -> Result<Vec<Model>> {
