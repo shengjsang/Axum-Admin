@@ -34,9 +34,9 @@ pub async fn change_status(Json(req): Json<TodoIDReq>) -> Res<Model> {
     }
 }
 
-pub async fn change_status(Json(req): Json<TodoIDReq>) -> Res<Model> {
+pub async fn delete_task(Json(req): Json<TodoIDReq>) -> Res<String> {
     let db = DB.get_or_init(init).await;
-    let res = service::todo::change_status(db, req.id).await;
+    let res = service::todo::delete_task(db, req.id).await;
     match res {
         Ok(x) => Res::ok_with_data(x),
         Err(e) => Res::error_with_msg(500, e.to_string()),
