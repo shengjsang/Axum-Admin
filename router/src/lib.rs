@@ -2,9 +2,9 @@ use api::common::jwt::protected;
 use api::common::{show_captcha, test};
 use api::system::info::get_info;
 use api::todo;
-use api::todo::{change_status, get_all_tasks};
+use api::todo::{change_status, delete_task, get_all_tasks};
 use api::user::{create, login};
-use axum::routing::{get, post};
+use axum::routing::{delete, get, post};
 use axum::Router;
 
 pub fn api() -> Router {
@@ -27,6 +27,7 @@ fn todo_api() -> Router {
         .route("/create", post(todo::create))
         .route("/get-all", get(get_all_tasks)) // 注册
         .route("/change-status", post(change_status))
+        .route("/delete-task", delete(delete_task))
 }
 
 fn common_api() -> Router {
