@@ -49,3 +49,16 @@ pub async fn get_all_tasks(db: &DatabaseConnection) -> Result<Vec<Model>> {
     let tasks = Todo::find().all(db).await?;
     Ok(tasks)
 }
+
+pub async fn get_task_by_id(db: &DatabaseConnection, id: i32) -> Result<Model> {
+
+    let res = Todo::find_by_id(id).one(db).await?;
+    let todo = match res {
+        None => {
+            return Err(anyhow!("未查到对应任务"));
+        }
+        Some(todo) => todo
+    };
+
+    Ok(todo)
+}

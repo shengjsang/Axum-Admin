@@ -42,3 +42,14 @@ pub async fn delete_task(Json(req): Json<TodoIDReq>) -> Res<String> {
         Err(e) => Res::error_with_msg(500, e.to_string()),
     }
 }
+
+pub async fn get_task(Json(req): Json<TodoIDReq>) -> Res<Model> {
+
+    let db = DB.get_or_init(init).await;
+    let res = service::todo::get_task_by_id(db, req.id).await;
+
+    match res {
+        Ok(x) => Res::ok_with_data(x),
+        Err(e) => Res::error_with_msg(500, e.to_string()),
+    }
+}
