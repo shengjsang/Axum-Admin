@@ -45,6 +45,10 @@ pub async fn delete_task(db: &DatabaseConnection, id: i32) -> Result<String> {
     Ok("删除成功".to_string())
 }
 
+pub async fn delete_all_finish_task(db: &DatabaseConnection) -> Result<String> {
+    todo!();
+}
+
 pub async fn get_all_tasks(db: &DatabaseConnection) -> Result<Vec<Model>> {
     let tasks = Todo::find().all(db).await?;
     Ok(tasks)
