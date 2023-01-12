@@ -54,6 +54,30 @@ pub async fn get_all_tasks(db: &DatabaseConnection) -> Result<Vec<Model>> {
     Ok(tasks)
 }
 
+pub async fn get_today_tasks(db: &DatabaseConnection) -> Result<Vec<Model>> {
+    todo!()
+}
+
+
+pub async fn get_tomorrow_tasks(db: &DatabaseConnection) -> Result<Vec<Model>> {
+    todo!()
+}
+
+
+pub async fn get_week_tasks(db: &DatabaseConnection) -> Result<Vec<Model>> {
+    todo!()
+}
+
+pub async fn get_month_tasks(db: &DatabaseConnection) -> Result<Vec<Model>> {
+    todo!()
+}
+
+
+pub async fn get_year_tasks(db: &DatabaseConnection) -> Result<Vec<Model>> {
+    todo!()
+}
+
+
 pub async fn get_task_by_id(db: &DatabaseConnection, id: i32) -> Result<Model> {
 
     let res = Todo::find_by_id(id).one(db).await?;
