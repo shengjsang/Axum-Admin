@@ -1,9 +1,10 @@
-use crate::rand::Random;
 use crate::redis::{connect, set};
 use anyhow::Result;
 use captcha::filters::Noise;
 use captcha::Captcha;
 use configs::CFG;
+use crate::rand::CharSetKind::NumberAndLetter;
+use crate::rand::Custom;
 
 pub async fn new() -> Result<(String, String)> {
     let (captcha_id, captcha_code, captcha_img) = generate();
@@ -20,7 +21,7 @@ pub async fn new() -> Result<(String, String)> {
 }
 
 pub fn generate() -> (String, String, String) {
-    let captcha_id = Random::new(12).generate();
+    let captcha_id = Custom::new(12,NumberAndLetter).generate();
 
     let mut captcha = Captcha::new();
     let captcha_code = captcha.add_chars(CFG.captcha.length).chars_as_string();

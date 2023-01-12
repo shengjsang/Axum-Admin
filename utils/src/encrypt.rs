@@ -1,8 +1,9 @@
-use crate::rand::Random;
 use std::fmt::Write;
+use crate::rand::CharSetKind::NumberAndLetter;
+use crate::rand::Custom;
 
 pub fn encrypt_password(password: String) -> (String, String) {
-    let salt = Random::new(8).generate();
+    let salt = Custom::new(8,NumberAndLetter).generate();
     let password = password + salt.as_str();
     let encrypt_password = md5::compute(password).to_vec();
 
